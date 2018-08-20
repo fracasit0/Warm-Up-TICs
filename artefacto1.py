@@ -15,6 +15,7 @@ import os
 import math
 import sys
 
+version = "V0.5"
 ax = 99
 sueldobase = 99
 AFP = 99
@@ -22,11 +23,10 @@ contrato = 99
 salud = 99
 planuf = 99
 
-
 def titulo():
     os.system("CLS")
     print "\nBienvenido al asistente de sueldos!, creado por Agustin Carmona & Tomas Orellana"
-    print "Tecnologias de informacion y comunicacion, profesor Jorge Eliott\n\n"
+    print("Tecnologias de informacion y comunicacion, profesor Jorge Eliott. Version {}\n\n".format(version))
 
 
 def datos():
