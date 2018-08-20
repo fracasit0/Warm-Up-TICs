@@ -52,6 +52,77 @@ def datos():
     if salud == 1: print("plan en UF: {}".format(planuf))
     print "\n"
 
+def calculiq():
+    titulo()
+    print "IMPORTANTE: La calculadora solo considera casos normales chilenos de 12 sueldos anuales,"
+    print "es decir, sin bonos, items no imponibles, beneficios, descuentos y otras variables voluntarias."
+    print "Porfavor considerar esto al calcular su sueldo liquido.\n"
+    print "Ingrese a continuacion su sueldo base o BRUTO sin comas, puntos ni guiones:"
+    sueldobase = int(raw_input(">>: "))
+
+    gratificacion = sueldobase*0.25
+    if gratificacion > 109250:
+        gratificacion = 109250
+
+    sueldoimponible = sueldobase + gratificacion
+
+    if AFP == 0: #Modelo 10,77%
+        AFPdcto = sueldoimponible*0.1077
+    elif AFP == 1: #ProVida 11,45%
+        AFPdcto = sueldoimponible*0.1145
+    elif AFP == 2: #Plan Vital 10,41%
+        AFPdcto = sueldoimponible*0.1041
+    elif AFP == 3: #Habitat 11,27%
+        AFPdcto = sueldoimponible*0.1127
+    elif AFP == 4: #Cuprum 11,44%
+        AFPdcto = sueldoimponible*0.1144
+    elif AFP == 5: #Capital 11,44%
+        AFPdcto = sueldoimponible*0.1144
+
+    if salud == 0:
+        saludcto = sueldoimponible*0.07
+
+    if contrato == 0: #plazo indefinido
+        contratodcto = sueldoimponible*0.024
+    elif contrato == 1: #plazo fijo
+        contratodcto = sueldoimponible*0.03
+    elif contrato == 2: #plazo 11 meses o mas
+        contratodcto = sueldoimponible*0.008
+
+    totaldcto = AFPdcto + saludcto + contratodcto
+    impuestounico = sueldoimponible - totaldcto
+
+    if impuestounico < 646920:
+        impuesto = 0
+    elif impuestounico > 646920 and impuestounico < 1437600:
+        impuesto = impuestounico*0.04 - 25876
+    elif impuestounico > 1437600 and impuestounico < 2396000:
+        impuesto = impuestounico*0.08 - 83380
+    elif impuestounico > 2396000 and impuestounico < 3354400:
+        impuesto = impuestounico*0.135 - 215160
+    elif impuestounico > 3354400 and impuestounico < 4318000:
+        impuesto = impuestounico*0.23 - 523828
+    elif impuestounico > 4318000 and impuestounico < 5750400:
+        impuesto = impuestounico*0.304 - 852976
+    elif impuestounico > 5750400:
+        impuesto = impuestounico*0.35 - 1117494
+
+    totaldcto = totaldcto + impuesto
+    sueldoliquido = sueldoimponible - totaldcto
+
+    titulo()
+    print "El resultado del calculo es:\n"
+    print("sueldo bruto: {}".format(sueldobase))
+    print("gratificacion: {}".format(gratificacion))
+    print("total imponible: {}\n".format(sueldoimponible))
+    print("descuento AFP: {}".format(AFPdcto))
+    print("descuento salud: {}".format(saludcto))
+    print("seguro de cesantia: {}".format(contratodcto))
+    print("impuestos: {}\n".format(impuesto))
+    print("descuentos totales: {}".format(totaldcto))
+    print("***Sueldo liquido: {}".format(sueldoliquido))
+    print "\n"
+
 #-------------------------
 titulo()
 
@@ -108,3 +179,6 @@ print "eliga la opcion que desea calcular:"
 print "[1] Calcular sueldo Liquido ; [2] Calcular sueldo bruto"
 while ax < 1 or ax > 2:
     ax = int(raw_input(">>: "))
+
+if ax == 1:
+    calculiq()
