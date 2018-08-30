@@ -1,10 +1,13 @@
 import os
 import math
 import sys
+import time
 
 #Iniciamos variables en 99 para evitar conflictos
 
 version = "1.1v"
+UFF = "30.066,37"
+sueldominimo = "286.000"
 ax = 99
 sueldobase = 99
 AFP = 99
@@ -22,8 +25,34 @@ def titulo():
     os.system("CLS")
     print ("\nBienvenido al asistente de sueldos!, creado por Agustin Carmona & Tomas Orellana")
     print ("Tecnologias de informacion y comunicacion, profesor Jorge Eliott")
-    print ("Version: {}\n\n".format(version))
+    print ("Version: {} - Valor UF actualmente: {}\n\n".format(version, UFF))
 
+def modificar():
+    datos()
+    print ("Si deseas modificar alguna informacion anterior, utiliza las siguientes opciones:")
+    print ("[1] AFP ; [2] tipo de contrato ; [3] plan de salud ; [0] continuar")
+    ax = int(input(">>: "))
+    if ax == 1:
+        print ("\nIngresa tu AFP:")
+        print ("(0) Modelo ; (1) ProVida ; (2) PlanVital ; (3) Habitat ; (4) Cuprum ; (5) Capital")
+        AFP = int(input("[1] AFP: "))
+        while(AFP > 5 or AFP < 0):
+            AFP = int(input("AFP invalida: "))
+    if ax == 2:
+        print ("\nIngresa tu tipo de contrato:")
+        print ("(0) Plazo indefinido ; (1) Plazo fijo ; (2) Plazo indefinido 11 anos o mas")
+        contrato = int(input("[2] contrato: "))
+        while(contrato > 2 or contrato < 0):
+            contrato = int(input("contrato invalido: "))
+    if ax == 3:
+        print ("\nIngresa tu plan de salud:")
+        print ("(0) fonasa ; (1) isapre")
+        salud = int(input("[3] salud: "))
+        while(salud > 1 or salud < 0):
+            salud = int(input("salud invalido: "))
+        if salud == 1:
+            planuf = int(input("Ingresa plan en UF: "))
+            planuf = planuf*29168
 
 def datos():
     #Funcion que presenta los datos ingresados al iniciar el programa
@@ -52,7 +81,7 @@ def datos():
 
 def opcion():
     print ("Porfavor eligir la opcion para continuar:")
-    print ("[1] Calcular sueldo Liquido ; [2] Calcular sueldo bruto ; [3] Atras")
+    print ("[1] Calcular sueldo Liquido ; [2] Calcular sueldo bruto ; [3] Informacion ; [0] Atras")
     ax = int(input(">>: "))
 
     if ax == 1:
@@ -60,7 +89,21 @@ def opcion():
     elif ax == 2:
         bruto()
     elif ax == 3:
-        print ("back")
+        info()
+    elif ax == 0:
+        modificar()
+
+def info():
+    titulo()
+    fecha = time.time()
+    print ("Informacion de la fecha {} actual:".format(fecha))
+    print ("Valor de UF actual: {}".format(UFF))
+    print ("Sueldo minimo: {}".format(sueldominimo))
+    print ("Impuesto a la renta maximo: %35")
+    print ("Software basado y programado en python.")
+    print ("*Toda la informacion es obtenida de previred.cl, todos los creditos para la pagina.")
+    print ("\n")
+    opcion()
 
 def bruto():
     titulo()
@@ -118,6 +161,7 @@ def bruto():
 
     bruto = (sueldo-k)/((1.0-AFPdcto-saludcto-contratodcto)*(1.0-f))
 
+    impuestos = (bruto - bruto*AFPdcto - bruto*saludcto - bruto*contratodcto)*f - k
 
     titulo()
     print ("El resultado del calculo es:\n")
@@ -128,7 +172,7 @@ def bruto():
     elif salud == 1:
         print("descuento salud: {}".format(bruto*saludcto+planuf))
     print("seguro de cesantia: {}".format(bruto*contratodcto))
-    print("impuestos: {}\n".format(bruto*(1.0-f)))
+    print("impuestos: {}\n".format(impuestos))
     print("***Sueldo bruto: {}".format(bruto))
     print ("\n")
     opcion()
